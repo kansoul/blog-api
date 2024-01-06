@@ -11,7 +11,7 @@ const userRoute = require("./src/router/user.route");
 const categoryRoute = require("./src/router/category.route");
 const tagRoute = require("./src/router/tag.route");
 const mediaRoute = require("./src/router/media.route");
-const postRoute = require("./src/router/post.route");
+const blogRoute = require("./src/router/blog.route");
 
 mongoose.set("strictQuery", false);
 mongoose.connect(MONGODB, { dbName: "blogs" }).then(() => {
@@ -27,7 +27,7 @@ app.use("/api/v1", userRoute);
 app.use("/api/v1", categoryRoute);
 app.use("/api/v1", tagRoute);
 app.use("/api/v1", mediaRoute);
-app.use("/api/v1", postRoute);
+app.use("/api/v1", blogRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,6 +1,6 @@
 const Yup = require("yup");
 
-const postSchema = Yup.object().shape({
+const blogSchema = Yup.object().shape({
   title: Yup.string().required("Title is required"),
   content: Yup.string().required("Content is required"),
   slug: Yup.string().required("Slug is required"),
@@ -12,5 +12,5 @@ const postSchema = Yup.object().shape({
 });
 
 module.exports = {
-  postSchema,
+  blogSchema,
 };

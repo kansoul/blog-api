@@ -4,7 +4,6 @@ const userSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
   token: Yup.string().optional(),
-  role: Yup.string().oneOf(["AUTHOR", "ADMIN"], "Invalid role").optional(),
   email: Yup.string()
     .required("Email is required")
     .email("Invalid email format"),
@@ -12,6 +11,12 @@ const userSchema = Yup.object().shape({
   avatar: Yup.string().optional(), // Add additional validation if needed for the avatar field
 });
 
+const loginSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().required("Password is required"),
+});
+
 module.exports = {
   userSchema,
+  loginSchema,
 };
