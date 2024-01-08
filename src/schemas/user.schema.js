@@ -8,6 +8,7 @@ const userSchema = Yup.object().shape({
     .required("Email is required")
     .email("Invalid email format"),
   phoneNumber: Yup.string().optional(),
+  name: Yup.string().optional(),
   avatar: Yup.string().optional(), // Add additional validation if needed for the avatar field
 });
 

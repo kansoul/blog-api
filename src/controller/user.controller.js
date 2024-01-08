@@ -39,13 +39,14 @@ const getUser = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
-    const { username, password, email, phoneNumber, avatar } = req.body;
+    const { username, name, password, email, phoneNumber, avatar } = req.body;
     //Encrypt user password
     encryptedPassword = await bcrypt.hash(password, 10);
 
     // Create user
     const data = await User.create({
       username,
+      name,
       password: encryptedPassword,
       email,
       phoneNumber,
@@ -103,7 +104,7 @@ const loginUser = async (req, res) => {
     if (!(username && password)) {
       res.status(401).json(response401);
     }
-    const user = await User.findOne({ username }).select("username password");
+    const user = await User.findOne({ username });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
