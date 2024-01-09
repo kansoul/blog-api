@@ -9,12 +9,12 @@ const verifyToken = (req, res, next) => {
   }
   try {
     const decoded = jwt.verify(token, TOKEN_KEY);
-    if (!decoded.role || !decoded.code) {
+    if (!decoded.username || !decoded.role) {
       return res.status(500).json(response500);
     }
     req.user = decoded;
   } catch (err) {
-    return res.status(401).json(response401);
+    return res.status(500).json(response500);
   }
   return next();
 };
