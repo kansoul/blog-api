@@ -7,11 +7,12 @@ const {
 } = require("../controller/media.controller");
 const validation = require("../middleware/validation");
 const { mediaSchema } = require("../schemas/media.schema");
+const auth = require("../middleware/auth");
 const route = express.Router();
 
 // GET
 route.get("/media/:imageId", getMedia);
-route.get("/media", getAllMedia);
+route.get("/media", auth, getAllMedia);
 
 // POST
 route.post("/media", validation(mediaSchema), postMedia);

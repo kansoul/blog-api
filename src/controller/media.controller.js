@@ -25,7 +25,9 @@ const postMedia = async (req, res) => {
 
 const getAllMedia = async (req, res) => {
   try {
-    const medias = await Media.find();
+    const medias = await Media.find().select(
+      "title type description created_at"
+    );
     return res.status(200).json({
       ...response200,
       data: medias,
