@@ -3,8 +3,10 @@ const {
   response404,
   response500,
   response400,
+  response401,
 } = require("../config/response");
 const Media = require("../models/Media");
+const { ObjectId } = require("mongodb");
 
 const postMedia = async (req, res) => {
   try {
@@ -59,11 +61,35 @@ const getMedia = async (req, res) => {
   }
 };
 
+const updateMedia = async (req, res) => {
+  try {
+    const imageId = req.params.imageId;
+    if (!imageId) return res.status(401).json(response401);
+
+    const image = await Media.findOne({ _id: new ObjectId(imageId) });
+    if (image) {
+      try {
+        const data = await Media.updateOne(
+          { _id: new ObjectId(imageId) },
+          { $set: req.body }
+        );
+        if (data) return res.status(200).json(response200);
+        return res.status(400).json(response400);
+      } catch (error) {
+        res.status(500).json(response500);
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(response500);
+  }
+};
+
 const deleteMedia = async (req, res) => {
   try {
-    const imageId = req.params.id;
-
-    const data = await Media.findByIdAndRemove({
+    const imageId = req.params.imageId.toString().trim();
+    if (!imageId) return res.status(401).json(response401);
+    const data = await Media.findOneAndDelete({
       _id: new ObjectId(imageId),
     });
     if (data) return res.status(200).json(response200);
@@ -78,4 +104,5 @@ module.exports = {
   getMedia,
   getAllMedia,
   deleteMedia,
+  updateMedia,
 };

@@ -4,9 +4,10 @@ const {
   getMedia,
   getAllMedia,
   deleteMedia,
+  updateMedia,
 } = require("../controller/media.controller");
 const validation = require("../middleware/validation");
-const { mediaSchema } = require("../schemas/media.schema");
+const { mediaSchema, updateSchema } = require("../schemas/media.schema");
 const auth = require("../middleware/auth");
 const route = express.Router();
 
@@ -15,9 +16,12 @@ route.get("/media/:imageId", getMedia);
 route.get("/media", auth, getAllMedia);
 
 // POST
-route.post("/media", validation(mediaSchema), postMedia);
+route.post("/media", auth, validation(mediaSchema), postMedia);
+
+// PUT
+route.put("/media/:imageId", auth, validation(updateSchema), updateMedia);
 
 // DELETE
-route.delete("/media/:imageId", deleteMedia);
+route.delete("/media/:imageId", auth, deleteMedia);
 
 module.exports = route;
