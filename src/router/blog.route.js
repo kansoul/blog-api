@@ -8,6 +8,8 @@ const {
   getBlogs,
   getBlog,
   createBlog,
+  updateBlog,
+  deleteBlog,
 } = require("../controller/blog.controller");
 const { checkInvalidParam } = require("../utils/helper");
 const route = express.Router();
@@ -39,6 +41,12 @@ route.get("/blogs/category/:categoryId", (req, res) => {
 route.get("/blog/:slug", getBlog);
 
 // POST
-route.post("/blogs", validation(blogSchema), createBlog);
+route.post("/blog", auth, validation(blogSchema), createBlog);
+
+// PUT
+route.put("/blog/:blogId", auth, validation(blogSchema), updateBlog);
+
+// Delete
+route.delete("/blog/:blogId", auth, deleteBlog);
 
 module.exports = route;

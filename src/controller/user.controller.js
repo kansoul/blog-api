@@ -153,10 +153,57 @@ const logoutUser = async (req, res) => {
   }
 };
 
+const updateInformationUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    if (!userId || req.body.information)
+      return res.status(401).json(response401);
+
+    const user = await User.findOne({ _id: new ObjectId(userId) });
+    if (user) {
+      try {
+        const data = await User.updateOne(
+          { _id: new ObjectId(userId) },
+          {
+            $set: {
+              name:
+                req.body.information?.firstName +
+                req.body.information?.lastName,
+              information: req.body.information,
+            },
+          }
+        );
+        if (data) return res.status(200).json(response200);
+        return res.status(400).json(response400);
+      } catch (error) {
+        res.status(500).json(response500);
+      }
+    }
+  } catch (error) {
+    res.status(500).json(response500);
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.userId.toString().trim();
+    if (!userId) return res.status(401).json(response401);
+    const data = await User.findOneAndDelete({
+      _id: new ObjectId(userId),
+    });
+    if (data) return res.status(200).json(response200);
+    return res.status(400).json(response400);
+  } catch (error) {
+    res.status(500).json(response500);
+  }
+};
+
 module.exports = {
   getUsers,
   getUser,
   createUser,
   loginUser,
   logoutUser,
+  updateInformationUser,
+  deleteUser,
 };

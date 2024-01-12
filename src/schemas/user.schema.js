@@ -19,7 +19,6 @@ const userSchema = Yup.object().shape({
   email: Yup.string()
     .required("Email is required")
     .email("Invalid email format"),
-  phoneNumber: Yup.string().optional(),
   name: Yup.string().optional(),
   avatar: Yup.string().optional(), // Add additional validation if needed for the avatar field
 });
@@ -41,7 +40,23 @@ const loginSchema = Yup.object().shape({
     ),
 });
 
+const informationSchema = Yup.object().shape({
+  firstName: Yup.string().required("First name is required"),
+  lastName: Yup.string().required("Last name is required"),
+  country: Yup.string().optional(),
+  city: Yup.string().optional(),
+  address: Yup.string().optional(),
+  phoneNumber: Yup.string().optional(),
+  birthday: Yup.date().optional(),
+  organization: Yup.string().optional(),
+  companyName: Yup.string().optional(),
+  role: Yup.string().optional(),
+  department: Yup.string().optional(),
+  zipCode: Yup.string().optional(),
+});
+
 module.exports = {
   userSchema,
   loginSchema,
+  informationSchema,
 };

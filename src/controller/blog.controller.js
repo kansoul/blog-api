@@ -1,6 +1,11 @@
-const { PUBLISH } = require("../config/app");
-const { response200, response404, response500 } = require("../config/response");
+const {
+  response200,
+  response404,
+  response500,
+  response400,
+} = require("../config/response");
 const Blog = require("../models/Blog");
+const { ObjectId } = require("mongodb");
 
 const getBlogs = async (req, res) => {
   try {
@@ -59,25 +64,54 @@ const createBlog = async (req, res) => {
       updated_at: new Date(),
     });
 
-    const dataToSave = await data
-      .save()
-      .then(() => {
-        return res.status(200).json(response200);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const dataToSave = await data.save();
+    if (dataToSave) return res.status(200).json(response200);
   } catch (error) {
     res.status(500).json(response500);
   }
 };
 
-const updatePost = (req, res) => {};
+const updateBlog = async (req, res) => {
+  try {
+    const blogId = req.params.blogId;
+    if (!blogId) return res.status(401).json(response401);
 
-const deletePost = (req, res) => {};
+    const blog = await Blog.findOne({ _id: new ObjectId(blogId) });
+    if (blog) {
+      try {
+        const data = await Blog.updateOne(
+          { _id: new ObjectId(blogId) },
+          { $set: req.body }
+        );
+        if (data) return res.status(200).json(response200);
+        return res.status(400).json(response400);
+      } catch (error) {
+        res.status(500).json(response500);
+      }
+    }
+  } catch (error) {
+    res.status(500).json(response500);
+  }
+};
+
+const deleteBlog = async (req, res) => {
+  try {
+    const blogId = req.params.blogId.toString().trim();
+    if (!blogId) return res.status(401).json(response401);
+    const data = await Blog.findOneAndDelete({
+      _id: new ObjectId(blogId),
+    });
+    if (data) return res.status(200).json(response200);
+    return res.status(400).json(response400);
+  } catch (error) {
+    res.status(500).json(response500);
+  }
+};
 
 module.exports = {
   getBlogs,
   getBlog,
   createBlog,
+  updateBlog,
+  deleteBlog,
 };
