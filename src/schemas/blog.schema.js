@@ -5,7 +5,9 @@ const blogSchema = Yup.object().shape({
   content: Yup.string().required("Content is required"),
   slug: Yup.string().required("Slug is required"),
   featuredMedia: Yup.string().required("Featured media is required"),
-  status: Yup.string().required("Status is required"),
+  status: Yup.string()
+    .required("Status is required")
+    .oneOf(["PUBLISH", "PRIVATE"], "Invalid status"),
   category: Yup.string().required("Category is required"),
   tags: Yup.array().of(Yup.string().required("Tag is required")),
   author: Yup.string().required("Author is required"),
