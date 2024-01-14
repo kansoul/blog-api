@@ -11,7 +11,7 @@ const { ObjectId } = require("mongodb");
 const getBlogs = async (req, res) => {
   try {
     const customQuery = req.customQuery;
-    console.log(customQuery);
+
     const blogs = await Blog.find(customQuery)
       .populate("tags")
       .populate("category")
