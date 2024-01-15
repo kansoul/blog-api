@@ -17,7 +17,12 @@ const updateSchema = Yup.object().shape({
     .oneOf(["AVATAR", "MEDIA", "OTHER"], "Invalid role"),
 });
 
+const uploadImageSchema = Yup.object().shape({
+  data: Yup.string().required("Base64 is required"),
+});
+
 module.exports = {
   mediaSchema,
   updateSchema,
+  uploadImageSchema,
 };

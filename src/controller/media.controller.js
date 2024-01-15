@@ -19,7 +19,29 @@ const postMedia = async (req, res) => {
       created_at: new Date(),
     });
     const dataToSave = await newImage.save();
-    if (dataToSave) res.status(200).json(response200);
+    if (dataToSave) res.status(200).json({ ...response200, data: dataToSave });
+  } catch (error) {
+    res.status(500).json(response500);
+  }
+};
+
+const uploadMedia = async (req, res) => {
+  try {
+    const { data } = req.body;
+    const newImage = new Media({
+      title: "Blog",
+      data,
+      type: "OTHER",
+      created_at: new Date(),
+    });
+    const dataToSave = await newImage.save();
+    if (dataToSave)
+      res.status(200).json({
+        ...response200,
+        data: {
+          _id: dataToSave._id,
+        },
+      });
   } catch (error) {
     res.status(500).json(response500);
   }
@@ -41,7 +63,7 @@ const getAllMedia = async (req, res) => {
 
 const getMedia = async (req, res) => {
   const imageId = req.params.imageId;
-
+  if (!ObjectId.isValid(imageId)) return res.status(404).json(response404);
   try {
     const image = await Media.findById(imageId);
 
@@ -56,7 +78,6 @@ const getMedia = async (req, res) => {
     });
     res.end(imageBuffer);
   } catch (error) {
-    console.error(error);
     res.status(500).json(response500);
   }
 };
@@ -104,4 +125,5 @@ module.exports = {
   getAllMedia,
   deleteMedia,
   updateMedia,
+  uploadMedia,
 };
