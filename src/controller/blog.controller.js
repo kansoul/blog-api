@@ -15,7 +15,11 @@ const getBlogs = async (req, res) => {
     const blogs = await Blog.find(customQuery)
       .populate("tags")
       .populate("category")
-      .populate("author");
+      .populate({
+        path: "author",
+        model: "User",
+        select: "_id username avatar email",
+      });
     return res.status(200).json({
       ...response200,
       data: blogs,
@@ -29,7 +33,13 @@ const getBlog = async (req, res) => {
   try {
     const slug = req.params.slug;
     if (!slug) return res.status(404).json(response404);
-    const blog = await Blog.findOne({ slug });
+    const blog = await Blog.findOne({ slug })
+      .populate("tags")
+      .populate("category")
+      .populate({
+        path: "author",
+        select: "_id username avatar email",
+      });
     return res.status(200).json({
       ...response200,
       data: blog,

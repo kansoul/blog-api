@@ -10,7 +10,27 @@ const { ObjectId } = require("mongodb");
 
 const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find();
+    const categories = await Category.aggregate([
+      [
+        {
+          $lookup: {
+            from: "blogs", // tên collection của blog
+            localField: "_id",
+            foreignField: "category",
+            as: "blogs",
+          },
+        },
+        {
+          $project: {
+            name: 1,
+            featuredMedia: 1,
+            slug: 1,
+            description: 1,
+            count: { $size: "$blogs" },
+          },
+        },
+      ],
+    ]);
     return res.status(200).json({
       ...response200,
       data: categories,
