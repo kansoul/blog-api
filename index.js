@@ -23,6 +23,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 //Route
+app.get("/", (req, res) => res.send("Welcome"));
 app.use("/api/v1", userRoute);
 app.use("/api/v1", categoryRoute);
 app.use("/api/v1", tagRoute);
