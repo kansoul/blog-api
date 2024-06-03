@@ -26,6 +26,7 @@ const getCategories = async (req, res) => {
             featuredMedia: 1,
             slug: 1,
             description: 1,
+            blogs: 1,
             count: { $size: "$blogs" },
           },
         },

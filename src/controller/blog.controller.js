@@ -11,7 +11,7 @@ const { ObjectId } = require("mongodb");
 const getBlogs = async (req, res) => {
   try {
     const customQuery = req.customQuery;
-
+    const limit = req.limit;
     const blogs = await Blog.find(customQuery)
       .populate("tags")
       .populate("category")
@@ -19,12 +19,14 @@ const getBlogs = async (req, res) => {
         path: "author",
         model: "User",
         select: "_id username avatar email",
-      });
+      })
+      .limit(limit);
     return res.status(200).json({
       ...response200,
       data: blogs,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json(response500);
   }
 };

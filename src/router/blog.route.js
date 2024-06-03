@@ -27,7 +27,7 @@ route.get("/blogs/author/:authorId", (req, res) => {
 route.get("/blogs/tag/:tagId", (req, res) => {
   const { tagId } = req.params;
   checkInvalidParam(tagId, res);
-  req.customQuery = { $in: [tags] };
+  req.customQuery = { tags: { $in: [tagId] } };
   return getBlogs(req, res);
 });
 
@@ -35,6 +35,15 @@ route.get("/blogs/category/:categoryId", (req, res) => {
   const { categoryId } = req.params;
   checkInvalidParam(categoryId, res);
   req.customQuery = { category: categoryId };
+  return getBlogs(req, res);
+});
+
+route.get("/blogs/recent", (req, res) => {
+  req.limit = 7;
+  return getBlogs(req, res);
+});
+route.get("/blogs/popular", (req, res) => {
+  req.limit = 5;
   return getBlogs(req, res);
 });
 
